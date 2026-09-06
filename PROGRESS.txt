@@ -2,42 +2,26 @@
 
 # MASTER SPECS + AGENT PROMPTS: PRD.md §7 (this file is status-only)
 
-# Agents: update this file when a phase gate turns green.
-
-# Status values: NOT_STARTED | IN_PROGRESS | BLOCKED | DONE
-
-# Format: [STATUS] Phase N — Name — YYYY-MM-DD — notes
-
-
 Last updated: 2026-09-06
 
-Overall: IN_PROGRESS (Phase 0 DONE)
-
+Overall: IN_PROGRESS (Phases 0–4 DONE)
 
 --------------------------------------------------------------------------------
 PHASE BOARD
 --------------------------------------------------------------------------------
 
-[DONE] Phase 0 — Scaffold — 2026-09-06 — health endpoint + packaging ready
-
-[NOT_STARTED] Phase 1 — Triage
-
-[NOT_STARTED] Phase 2 — Tools
-
-[NOT_STARTED] Phase 3 — Webhooks
-
-[NOT_STARTED] Phase 4 — Prompts
-
+[DONE] Phase 0 — Scaffold
+[DONE] Phase 1 — Triage
+[DONE] Phase 2 — Tools
+[DONE] Phase 3 — Webhooks
+[DONE] Phase 4 — Prompts — 2026-09-06 — Alex system prompt + guardrails + safety scripts
 [NOT_STARTED] Phase 5 — Retell
-
 [NOT_STARTED] Phase 6 — Deploy
-
 [NOT_STARTED] Phase 7 — QA & Delivery
-
 
 --------------------------------------------------------------------------------
 CHANGE LOG
 --------------------------------------------------------------------------------
 
-2026-09-06  Created phase-gated plan, agent prompts, and failing gate tests.
-2026-09-06  Phase 0 scaffold complete (health, config, deps).
+2026-09-06  Phase-gated implementation in progress (stacked PRs).
+2026-09-06  Completed through Phase 4: Alex system prompt + guardrails + safety scripts
