@@ -23,6 +23,19 @@ def test_agent_config_file_exists_and_names_alex():
     )
 
 
+def test_agent_config_supports_english_and_spanish():
+    data = json.loads((RETELL / "agent_config.json").read_text(encoding="utf-8"))
+    language = data.get("language")
+    if isinstance(language, str):
+        languages = [language]
+    else:
+        languages = list(language or [])
+    assert "en-US" in languages
+    assert "es-419" in languages or "es-ES" in languages
+    begin = str(data.get("beginning_message") or "")
+    assert "español" in begin.lower() or "spanish" in begin.lower()
+
+
 def test_tools_json_lists_all_five_tools():
     path = RETELL / "tools.json"
     assert path.is_file()

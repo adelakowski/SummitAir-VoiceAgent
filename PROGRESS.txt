@@ -105,3 +105,9 @@ CHANGE LOG
 2026-09-06  Phases 2–3 tools + Retell webhooks; Phase 5–6 Retell/deploy artifacts.
 
 2026-09-06  Phase 7 QA scenarios, manual checklist, README polish — READY FOR REVIEW.
+
+2026-09-06  Added Spanish (es-419) bilingual support: prompts/es/*, Retell language multiselect, greeting offer.
+
+2026-09-06  Added GitHub Actions CI/CD (pytest + Docker build; Cloud Run deploy on main).
+
+

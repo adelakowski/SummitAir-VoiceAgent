@@ -139,6 +139,35 @@ Automated stand-in (logic only — do **not** fake WebRTC in unit tests):
 ---
 
 
+
+## 5. Spanish option (bilingual)
+
+
+
+**Act as:** Spanish-speaking caller (or say "español" after the greeting).
+
+
+
+| Step | Expect |
+
+| --- | --- |
+
+| Speak Spanish or request español | Agent switches to Spanish and stays there |
+
+| Report gas smell in Spanish | Spanish evacuate + 911 script (`prompts/es/scripts/evacuate_gas.md`) |
+
+| Routine booking in Spanish | One question at a time; collect address/name/availability in Spanish |
+
+
+
+Retell languages: `en-US` + `es-419` in `retell/agent_config.json`.
+
+
+
+---
+
+
+
 ## Sign-off
 
 
@@ -154,6 +183,8 @@ Automated stand-in (logic only — do **not** fake WebRTC in unit tests):
 | Gas / CO | | |
 
 | Hostile / interrupt | | |
+
+| Spanish | | |
 
 
 

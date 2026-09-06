@@ -42,7 +42,7 @@ Forward Deployed Engineering (FDE) prototype for **Revin**: an inbound HVAC voic
 
 
 
-Alex answers Summit Air inbound HVAC calls during seasonal volume spikes: classify urgency, escalate gas/CO, prioritize no-heat/no-AC with vulnerable residents, and mock-book routine jobs. V1 deliberately skips ServiceTitan, live calendars, and multi-lingual routing (PRD §2).
+Alex answers Summit Air inbound HVAC calls during seasonal volume spikes: classify urgency, escalate gas/CO, prioritize no-heat/no-AC with vulnerable residents, and mock-book routine jobs. Speaks English and Spanish (`en-US` + `es-419`). V1 deliberately skips ServiceTitan and live calendars (PRD §2).
 
 
 
@@ -166,6 +166,6 @@ GitHub Actions (`.github/workflows/ci-cd.yml`): on every PR/push to `main`, run 
 
 
 
-**Alex** — Summit Air dispatch assistant (prompts in `prompts/`; PRD §5).
+**Alex** — Summit Air dispatch assistant (English + Spanish; prompts in `prompts/` and `prompts/es/`; PRD §5).
 
 
