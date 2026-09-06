@@ -5,12 +5,6 @@
 Last updated: 2026-09-06
 
 Overall: IN_PROGRESS (Phases 0–4 DONE)
-
---------------------------------------------------------------------------------
-PHASE BOARD
---------------------------------------------------------------------------------
-
-[DONE] Phase 0 — Scaffold
 [DONE] Phase 1 — Triage
 [DONE] Phase 2 — Tools
 [DONE] Phase 3 — Webhooks
