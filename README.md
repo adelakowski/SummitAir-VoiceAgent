@@ -84,7 +84,7 @@ Caller → Twilio → Retell AI (STT/TTS/endpointing/barge-in)
 
 | Retell orchestration (latency + barge-in) | Custom WebRTC / WS event loops |
 
-| In-memory mock booking | ServiceTitan / live tech calendar |
+| SQLite tech schedule (John/Paul/George) | ServiceTitan / multi-region calendar |
 
 | Deterministic `classify_urgency` rules | LLM-only triage without tests |
 

@@ -108,6 +108,8 @@ CHANGE LOG
 
 2026-09-06  Added Spanish (es-419) bilingual support: prompts/es/*, Retell language multiselect, greeting offer.
 
+2026-09-06  Technician schedule: John/Paul/George, 2h slots, SQLite persistence (SCHEDULE_DB_PATH).
+
 2026-09-06  Added GitHub Actions CI/CD (pytest + Docker build; Cloud Run deploy on main).
 
 

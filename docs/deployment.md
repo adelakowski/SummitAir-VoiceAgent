@@ -14,11 +14,15 @@ PRD §2 trade-off: a 24-hour FDE prototype prioritizes ultra-low latency, natura
 
 
 
-## Mock booking
+## Technician schedule
 
+Crew: **John**, **Paul**, **George** — shared hours Mon–Sat 8:00–18:00 America/Denver, **2-hour** slots, one job per tech per slot.
 
+- `check_availability` → open slots with at least one free technician
+- `mock_schedule` / `flag_priority` → assign a tech, lock the slot, return `spoken_confirmation`
+- Persistence: SQLite via `SCHEDULE_DB_PATH` (default `data/schedule.db`). On Cloud Run use a mounted volume for multi-restart durability, or `/tmp/schedule.db` for single-instance demos (not shared across instances).
 
-`mock_schedule` and `check_availability` are in-memory mocks (see `app/tools/`). They prove the call flow and confirmation UX without ServiceTitan or a live technician calendar (deferred to V2). Priority and emergency paths use `flag_priority` / `escalate_emergency` and never treat gas/CO as a normal booking.
+Gas/CO still uses `escalate_emergency` and never books a technician.
 
 
 
@@ -35,6 +39,8 @@ PRD §2 trade-off: a 24-hour FDE prototype prioritizes ultra-low latency, natura
 | `LOG_LEVEL` | e.g. `INFO`, `DEBUG` |
 
 | `WEBHOOK_BASE_URL` | Public origin Retell calls (no trailing slash), e.g. `https://….run.app` |
+
+| `SCHEDULE_DB_PATH` | SQLite path for John/Paul/George bookings (default `data/schedule.db`; empty = in-memory) |
 
 | `RETELL_API_KEY` | Retell dashboard/API only — never bake into the image |
 
