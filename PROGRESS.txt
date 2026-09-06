@@ -4,15 +4,15 @@
 
 Last updated: 2026-09-06
 
-Overall: IN_PROGRESS (Phases 0–1 DONE)
+Overall: IN_PROGRESS (Phases 0–2 DONE)
 
 --------------------------------------------------------------------------------
 PHASE BOARD
 --------------------------------------------------------------------------------
 
 [DONE] Phase 0 — Scaffold
-[DONE] Phase 1 — Triage — 2026-09-06 — classify_urgency rules match PRD §3
-[NOT_STARTED] Phase 2 — Tools
+[DONE] Phase 1 — Triage
+[DONE] Phase 2 — Tools — 2026-09-06 — escalate/flag/schedule/availability mocks ready
 [NOT_STARTED] Phase 3 — Webhooks
 [NOT_STARTED] Phase 4 — Prompts
 [NOT_STARTED] Phase 5 — Retell
@@ -24,4 +24,4 @@ CHANGE LOG
 --------------------------------------------------------------------------------
 
 2026-09-06  Phase-gated implementation in progress (stacked PRs).
-2026-09-06  Completed through Phase 1: classify_urgency rules match PRD §3
+2026-09-06  Completed through Phase 2: escalate/flag/schedule/availability mocks ready
