@@ -4,7 +4,7 @@
 
 Last updated: 2026-09-06
 
-Overall: IN_PROGRESS (Phases 0–3 DONE)
+Overall: IN_PROGRESS (Phases 0–5 DONE)
 
 --------------------------------------------------------------------------------
 PHASE BOARD
@@ -13,9 +13,9 @@ PHASE BOARD
 [DONE] Phase 0 — Scaffold
 [DONE] Phase 1 — Triage
 [DONE] Phase 2 — Tools
-[DONE] Phase 3 — Webhooks — 2026-09-06 — Retell tool HTTP endpoints live
-[NOT_STARTED] Phase 4 — Prompts
-[NOT_STARTED] Phase 5 — Retell
+[DONE] Phase 3 — Webhooks
+[DONE] Phase 4 — Prompts
+[DONE] Phase 5 — Retell — 2026-09-06 — agent/tools config + operator checklist
 [NOT_STARTED] Phase 6 — Deploy
 [NOT_STARTED] Phase 7 — QA & Delivery
 
@@ -24,4 +24,4 @@ CHANGE LOG
 --------------------------------------------------------------------------------
 
 2026-09-06  Phase-gated implementation in progress (stacked PRs).
-2026-09-06  Completed through Phase 3: Retell tool HTTP endpoints live
+2026-09-06  Completed through Phase 5: agent/tools config + operator checklist

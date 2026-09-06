@@ -1,0 +1,87 @@
+{
+  "tools": [
+    {
+      "name": "classify_urgency",
+      "description": "Classify caller urgency from structured triage signals (gas/CO, extreme temp + vulnerable, maintenance, standard).",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "gas_or_co_suspected": { "type": "boolean" },
+          "no_heat": { "type": "boolean" },
+          "no_ac": { "type": "boolean" },
+          "vulnerable_resident": { "type": "boolean" },
+          "is_winter": { "type": "boolean" },
+          "is_summer": { "type": "boolean" },
+          "is_maintenance_only": { "type": "boolean" },
+          "caller_notes": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "url": "{{WEBHOOK_BASE_URL}}/webhooks/retell/classify_urgency"
+    },
+    {
+      "name": "escalate_emergency",
+      "description": "Life-safety escalation for gas smell or CO. Instructs evacuate + 911. Never books a technician.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "call_id": { "type": "string" },
+          "hazard_summary": { "type": "string" },
+          "caller_phone": { "type": "string" }
+        },
+        "required": ["call_id", "hazard_summary"],
+        "additionalProperties": false
+      },
+      "url": "{{WEBHOOK_BASE_URL}}/webhooks/retell/escalate_emergency"
+    },
+    {
+      "name": "flag_priority",
+      "description": "Flag a high-priority ticket (e.g. no heat + vulnerable) and return an emergency slot within ~4 hours.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "call_id": { "type": "string" },
+          "reason": { "type": "string" },
+          "address": { "type": "string" },
+          "availability": { "type": "string" }
+        },
+        "required": ["call_id", "reason"],
+        "additionalProperties": false
+      },
+      "url": "{{WEBHOOK_BASE_URL}}/webhooks/retell/flag_priority"
+    },
+    {
+      "name": "mock_schedule",
+      "description": "Book a mock standard or low-priority appointment. Requires name, address, property type, availability, urgency.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "call_id": { "type": "string" },
+          "name": { "type": "string" },
+          "address": { "type": "string" },
+          "property_type": { "type": "string" },
+          "availability": { "type": "string" },
+          "urgency": { "type": "string", "enum": ["standard", "low"] }
+        },
+        "required": ["call_id", "name", "address", "property_type", "availability", "urgency"],
+        "additionalProperties": false
+      },
+      "url": "{{WEBHOOK_BASE_URL}}/webhooks/retell/mock_schedule"
+    },
+    {
+      "name": "check_availability",
+      "description": "Return 2–3 mock appointment slots for a zip or address. High urgency yields earlier slots.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "zip_code": { "type": "string" },
+          "address": { "type": "string" },
+          "urgency": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "url": "{{WEBHOOK_BASE_URL}}/webhooks/retell/check_availability"
+    }
+  ]
+}
+
