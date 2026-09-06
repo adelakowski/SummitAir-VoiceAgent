@@ -4,7 +4,7 @@
 
 Last updated: 2026-09-06
 
-Overall: IN_PROGRESS (Phases 0–5 DONE)
+Overall: IN_PROGRESS (Phases 0–6 DONE)
 
 --------------------------------------------------------------------------------
 PHASE BOARD
@@ -16,7 +16,7 @@ PHASE BOARD
 [DONE] Phase 3 — Webhooks
 [DONE] Phase 4 — Prompts
 [DONE] Phase 5 — Retell — 2026-09-06 — agent/tools config + operator checklist
-[NOT_STARTED] Phase 6 — Deploy
+[DONE] Phase 6 — Deploy — 2026-09-06 — Docker + Cloud Run docs/script ready
 [NOT_STARTED] Phase 7 — QA & Delivery
 
 --------------------------------------------------------------------------------
@@ -25,3 +25,4 @@ CHANGE LOG
 
 2026-09-06  Phase-gated implementation in progress (stacked PRs).
 2026-09-06  Completed through Phase 5: agent/tools config + operator checklist
+2026-09-06  Completed through Phase 6: Docker + Cloud Run docs/script ready
