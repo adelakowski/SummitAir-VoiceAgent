@@ -77,7 +77,7 @@ Caller ──► Twilio number ──► Retell AI (STT/TTS/endpointing/barge-in
 
 To ensure the agent feels like a "good experience" rather than a "robot reading a form," the system prompt enforces specific behavioral guidelines optimized for Retell's engine.
 
-- **Persona:** "Alex," a helpful dispatch assistant for Summit Air. Empathetic, concise, and professional. 
+- **Persona:** "Alex," a helpful dispatch assistant for Summit Air. Empathetic, concise, and professional. Speaks English and Spanish (Latin America); matches the caller's language (`en-US` + `es-419` in Retell).
 - **Pacing & Extraction:** Ask one logical question at a time. Acknowledge caller distress (e.g., "I'm so sorry your heat is out, let's get this fixed.") before moving to data collection.
 
 ### Handling the Unexpected (Off-Script Guardrails)
