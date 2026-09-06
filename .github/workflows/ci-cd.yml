@@ -1,0 +1,140 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-cd-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run gate suite
+        run: pytest tests/ -v --tb=short
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t summit-air-voice-agent:ci .
+
+  deploy:
+    name: Deploy Cloud Run
+    needs: [test, docker]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID || secrets.GCP_PROJECT_ID }}
+      GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+      CLOUD_RUN_SERVICE: ${{ vars.CLOUD_RUN_SERVICE || 'summit-air-voice-agent' }}
+      ALLOW_UNAUTHENTICATED: ${{ vars.ALLOW_UNAUTHENTICATED || 'true' }}
+      WEBHOOK_BASE_URL: ${{ vars.WEBHOOK_BASE_URL || secrets.WEBHOOK_BASE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect GCP deploy config
+        id: gcp
+        env:
+          HAS_SA_KEY: ${{ secrets.GCP_SA_KEY != '' }}
+          HAS_WIF: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER != '' && secrets.GCP_SERVICE_ACCOUNT != '' }}
+        run: |
+          if [ -n "${GCP_PROJECT_ID}" ] && { [ "${HAS_SA_KEY}" = "true" ] || [ "${HAS_WIF}" = "true" ]; }; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+            if [ "${HAS_WIF}" = "true" ]; then
+              echo "auth=wif" >> "$GITHUB_OUTPUT"
+            else
+              echo "auth=sa_key" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping Cloud Run deploy — set GCP_PROJECT_ID and either GCP_SA_KEY or WIF secrets (see docs/deployment.md)."
+          fi
+
+      - name: Authenticate to Google Cloud (WIF)
+        if: steps.gcp.outputs.configured == 'true' && steps.gcp.outputs.auth == 'wif'
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Authenticate to Google Cloud (SA key)
+        if: steps.gcp.outputs.configured == 'true' && steps.gcp.outputs.auth == 'sa_key'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        if: steps.gcp.outputs.configured == 'true'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for GCR
+        if: steps.gcp.outputs.configured == 'true'
+        run: gcloud auth configure-docker --quiet
+
+      - name: Build and push image
+        if: steps.gcp.outputs.configured == 'true'
+        run: |
+          IMAGE="gcr.io/${GCP_PROJECT_ID}/${CLOUD_RUN_SERVICE}:${GITHUB_SHA}"
+          echo "IMAGE=${IMAGE}" >> "$GITHUB_ENV"
+          gcloud builds submit --project="${GCP_PROJECT_ID}" --tag "${IMAGE}" .
+
+      - name: Deploy to Cloud Run
+        if: steps.gcp.outputs.configured == 'true'
+        run: |
+          AUTH_FLAG="--no-allow-unauthenticated"
+          if [ "${ALLOW_UNAUTHENTICATED}" = "true" ]; then
+            AUTH_FLAG="--allow-unauthenticated"
+          fi
+
+          ENV_VARS="APP_ENV=production,LOG_LEVEL=INFO"
+          if [ -n "${WEBHOOK_BASE_URL}" ]; then
+            ENV_VARS="${ENV_VARS},WEBHOOK_BASE_URL=${WEBHOOK_BASE_URL}"
+          fi
+
+          gcloud run deploy "${CLOUD_RUN_SERVICE}" \
+            --project="${GCP_PROJECT_ID}" \
+            --image="${IMAGE}" \
+            --region="${GCP_REGION}" \
+            --platform=managed \
+            --port=8080 \
+            ${AUTH_FLAG} \
+            --set-env-vars="${ENV_VARS}"
+
+      - name: Print service URL
+        if: steps.gcp.outputs.configured == 'true'
+        run: |
+          URL="$(gcloud run services describe "${CLOUD_RUN_SERVICE}" \
+            --project="${GCP_PROJECT_ID}" \
+            --region="${GCP_REGION}" \
+            --format='value(status.url)')"
+          echo "Deployed: ${URL}"
+          echo "Set WEBHOOK_BASE_URL to this URL and update Retell tool endpoints if needed."
