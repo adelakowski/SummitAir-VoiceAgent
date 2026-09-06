@@ -1,0 +1,43 @@
+# Summit Air Voice Agent — Phase Progress Log
+
+# MASTER SPECS + AGENT PROMPTS: PRD.md §7 (this file is status-only)
+
+# Agents: update this file when a phase gate turns green.
+
+# Status values: NOT_STARTED | IN_PROGRESS | BLOCKED | DONE
+
+# Format: [STATUS] Phase N — Name — YYYY-MM-DD — notes
+
+
+Last updated: 2026-09-06
+
+Overall: IN_PROGRESS (Phase 0 DONE)
+
+
+--------------------------------------------------------------------------------
+PHASE BOARD
+--------------------------------------------------------------------------------
+
+[DONE] Phase 0 — Scaffold — 2026-09-06 — health endpoint + packaging ready
+
+[NOT_STARTED] Phase 1 — Triage
+
+[NOT_STARTED] Phase 2 — Tools
+
+[NOT_STARTED] Phase 3 — Webhooks
+
+[NOT_STARTED] Phase 4 — Prompts
+
+[NOT_STARTED] Phase 5 — Retell
+
+[NOT_STARTED] Phase 6 — Deploy
+
+[NOT_STARTED] Phase 7 — QA & Delivery
+
+
+--------------------------------------------------------------------------------
+CHANGE LOG
+--------------------------------------------------------------------------------
+
+2026-09-06  Created phase-gated plan, agent prompts, and failing gate tests.
+2026-09-06  Phase 0 scaffold complete (health, config, deps).
