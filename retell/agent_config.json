@@ -1,16 +1,16 @@
-{
-  "agent_name": "summit-air-alex",
-  "voice_id": "11labs-Adrian",
-  "language": "en-US",
-  "beginning_message": "Hi, thanks for calling Summit Air \u2014 this is Alex, your dispatch assistant. How can I help with your heating or cooling today?",
-  "general_prompt": "See prompts/system_alex.md for the full Alex system prompt. Follow guardrails in prompts/guardrails.json. On gas/CO, run prompts/scripts/evacuate_gas.md before any booking questions.",
-  "interruption_sensitivity": 0.9,
-  "enable_backchannel": true,
-  "responsiveness": 0.9,
-  "barge_in": {
-    "enabled": true,
-    "notes": "Retell native endpointing / overlap detection \u2014 agent stops speaking when the caller interrupts (address correction, urgency, etc.)."
-  },
-  "webhook_base_url_env": "WEBHOOK_BASE_URL",
-  "tools_file": "retell/tools.json"
-}
+{
+  "agent_name": "summit-air-alex",
+  "voice_id": "11labs-Adrian",
+  "language": ["en-US", "es-419"],
+  "beginning_message": "Hi, thanks for calling Summit Air — this is Alex, your dispatch assistant. Para español, dígalo ahora. How can I help with your heating or cooling today?",
+  "general_prompt": "See prompts/system_alex.md for the full Alex system prompt (English + Spanish language rules). Spanish assets: prompts/es/. Follow guardrails in prompts/guardrails.json (or prompts/es/guardrails.json in Spanish). On gas/CO, run prompts/scripts/evacuate_gas.md or prompts/es/scripts/evacuate_gas.md before any booking questions. Match the caller's language.",
+  "interruption_sensitivity": 0.9,
+  "enable_backchannel": true,
+  "responsiveness": 0.9,
+  "barge_in": {
+    "enabled": true,
+    "notes": "Retell native endpointing / overlap detection — agent stops speaking when the caller interrupts (address correction, urgency, etc.)."
+  },
+  "webhook_base_url_env": "WEBHOOK_BASE_URL",
+  "tools_file": "retell/tools.json"
+}

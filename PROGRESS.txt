@@ -2,26 +2,112 @@
 
 # MASTER SPECS + AGENT PROMPTS: PRD.md §7 (this file is status-only)
 
+# Agents: update this file when a phase gate turns green.
+
+# Status values: NOT_STARTED | IN_PROGRESS | BLOCKED | DONE
+
+# Format: [STATUS] Phase N — Name — YYYY-MM-DD — notes
+
+
+
 Last updated: 2026-09-06
 
-Overall: IN_PROGRESS (Phases 0–5 DONE)
+Overall: READY FOR REVIEW (Phases 0–7 DONE)
+
+
 
 --------------------------------------------------------------------------------
+
 PHASE BOARD
+
 --------------------------------------------------------------------------------
 
 [DONE] Phase 0 — Scaffold
-[DONE] Phase 1 — Triage
-[DONE] Phase 2 — Tools
-[DONE] Phase 3 — Webhooks
-[DONE] Phase 4 — Prompts
+
+[DONE] Phase 1 — Triage — 2026-09-06 — classify_urgency rules match PRD §3
+
+[DONE] Phase 2 — Tools — 2026-09-06 — escalate/flag/schedule/availability mocks ready
+
+[DONE] Phase 3 — Webhooks — 2026-09-06 — Retell tool HTTP endpoints live
+
+[DONE] Phase 4 — Prompts — 2026-09-06 — Alex system prompt + guardrails + safety scripts
+
 [DONE] Phase 5 — Retell — 2026-09-06 — agent/tools config + operator checklist
-[NOT_STARTED] Phase 6 — Deploy
-[NOT_STARTED] Phase 7 — QA & Delivery
+
+[DONE] Phase 6 — Deploy — 2026-09-06 — Docker + Cloud Run docs/script ready
+
+[DONE] Phase 7 — QA & Delivery — 2026-09-06 — scenarios + manual checklist + README polish
+
+[READY FOR REVIEW] Summit Air Voice Agent — all phase gates green
+
+
 
 --------------------------------------------------------------------------------
+
+PARALLEL TRACKS (after Phase 0)
+
+--------------------------------------------------------------------------------
+
+Track A: Phase 1 → 2 → 3
+
+Track B: Phase 4
+
+Track C: Phase 6 skeleton → finalize after Phase 3
+
+Merge:   Phase 5 → Phase 7
+
+
+
+--------------------------------------------------------------------------------
+
+GATE COMMANDS
+
+--------------------------------------------------------------------------------
+
+pytest tests/phase_00_scaffold/ -v
+
+pytest tests/phase_01_triage/ -v
+
+pytest tests/phase_02_tools/ -v
+
+pytest tests/phase_03_webhooks/ -v
+
+pytest tests/phase_04_prompts/ -v
+
+pytest tests/phase_05_retell/ -v
+
+pytest tests/phase_06_deploy/ -v
+
+pytest tests/phase_07_qa_delivery/ -v
+
+pytest tests/ -v
+
+
+
+--------------------------------------------------------------------------------
+
 CHANGE LOG
+
 --------------------------------------------------------------------------------
 
-2026-09-06  Phase-gated implementation in progress (stacked PRs).
-2026-09-06  Completed through Phase 5: agent/tools config + operator checklist
+2026-09-06  Created phase-gated plan, agent prompts, and failing gate tests.
+
+2026-09-06  Consolidated phase plan + agent prompts into PRD.md as master file.
+
+            phases/* reduced to pointers. No implementation phases completed yet.
+
+2026-09-06  Phase 0 scaffold complete (health, config, deps).
+
+2026-09-06  Phase 1 triage: classify_urgency rules match PRD §3.
+
+2026-09-06  Phase 4 prompts already green; synced board.
+
+2026-09-06  Phases 2–3 tools + Retell webhooks; Phase 5–6 Retell/deploy artifacts.
+
+2026-09-06  Phase 7 QA scenarios, manual checklist, README polish — READY FOR REVIEW.
+
+2026-09-06  Added Spanish (es-419) bilingual support: prompts/es/*, Retell language multiselect, greeting offer.
+
+2026-09-06  Added GitHub Actions CI/CD (pytest + Docker build; Cloud Run deploy on main).
+
+
