@@ -20,10 +20,10 @@ class Settings(BaseSettings):
     # Cloud Run: use a mounted volume path or /tmp for single-instance demos.
     schedule_db_path: str = "data/schedule.db"
 
-    # Post-call email summary
+    # Post-call email summary / Resend or SMTP
     summary_email_to: str = ""
     summary_email_from: str = "Summit Air Alex <onboarding@resend.dev>"
-    resend_api_key: str = ""
+    resend_api_key: Optional[str] = None
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_user: str = ""
@@ -33,8 +33,7 @@ class Settings(BaseSettings):
     # Optional: verify Retell event webhooks (skipped if empty)
     retell_api_key: str = ""
 
-    # Email settings (Resend)
-    resend_api_key: Optional[str] = None
+    # Mid-call admin notifications (tool handlers → EmailService)
     email_from: str = "Summit Air <onboarding@resend.dev>"
     email_enabled: bool = True
     admin_notification_email: str = "axeldelakowski@gmail.com"

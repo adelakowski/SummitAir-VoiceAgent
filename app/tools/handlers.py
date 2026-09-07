@@ -2,12 +2,17 @@
 
 from __future__ import annotations
 
+import asyncio
+import logging
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Any, Optional, Union
 
+from app.config import settings
 from app.tools import schedule as sched
 from app.tools.store import InMemoryStore, SqliteStore
+
+logger = logging.getLogger(__name__)
 
 Store = Union[InMemoryStore, SqliteStore]
 
@@ -20,6 +25,23 @@ class ToolValidationError(ValueError):
 
 def _store(store: Optional[Store]) -> Store:
     return store if store is not None else _DEFAULT_STORE
+
+
+def _notify_admin(send_coro_factory, *, label: str) -> None:
+    """Fire-and-forget admin email when enabled; never break the booking path."""
+    if not (settings.email_enabled and settings.admin_notification_email):
+        return
+    coro = None
+    try:
+        from app.email_service import get_email_service
+
+        email_service = get_email_service()
+        coro = send_coro_factory(email_service)
+        asyncio.create_task(coro)
+    except Exception as exc:
+        if coro is not None:
+            coro.close()
+        logger.error("Failed to send %s email notification: %s", label, exc)
 
 
 def escalate_emergency(
@@ -46,6 +68,16 @@ def escalate_emergency(
         "caller_phone": args.get("caller_phone"),
     }
     _store(store).add_escalation(result)
+
+    _notify_admin(
+        lambda svc: svc.send_admin_escalation_notification(
+            settings.admin_notification_email,
+            result,
+            args.get("call_transcript"),
+        ),
+        label="escalation",
+    )
+
     return result
 
 
@@ -127,6 +159,16 @@ def flag_priority(
     except ValueError as exc:
         raise ToolValidationError(str(exc)) from exc
     s.add_priority_ticket(ticket)
+
+    _notify_admin(
+        lambda svc: svc.send_admin_priority_notification(
+            settings.admin_notification_email,
+            ticket,
+            args.get("call_transcript"),
+        ),
+        label="priority",
+    )
+
     return ticket
 
 
@@ -197,6 +239,15 @@ def mock_schedule(
         s.add_booking(booking)
     except ValueError as exc:
         raise ToolValidationError(str(exc)) from exc
+
+    _notify_admin(
+        lambda svc: svc.send_admin_booking_notification(
+            settings.admin_notification_email,
+            booking,
+            args.get("call_transcript"),
+        ),
+        label="booking",
+    )
 
     return {
         "confirmation_id": confirmation_id,
