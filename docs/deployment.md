@@ -117,7 +117,20 @@ Set **one** auth method plus the project id:
 
 
 
-Optional variables/secrets: `GCP_REGION` (default `us-central1`), `CLOUD_RUN_SERVICE` (default `summit-air-voice-agent`), `ALLOW_UNAUTHENTICATED` (default `true`), `WEBHOOK_BASE_URL`.
+Optional variables/secrets:
+
+| Name | Type | Purpose |
+| --- | --- | --- |
+| `GCP_REGION` | variable | default `us-central1` |
+| `CLOUD_RUN_SERVICE` | variable | default `summit-air-voice-agent` |
+| `ALLOW_UNAUTHENTICATED` | variable | default `true` |
+| `WEBHOOK_BASE_URL` | variable or secret | public Cloud Run origin (no trailing slash) |
+| `SCHEDULE_DB_PATH` | variable | default `/tmp/schedule.db` |
+| `SUMMARY_EMAIL_TO` | variable or secret | post-call operator inbox |
+| `SUMMARY_EMAIL_FROM` | variable or secret | Resend from identity (default onboarding@resend.dev) |
+| `RESEND_API_KEY` | **secret** | required for post-call email; without it deploy warns and skips wiring email |
+
+Deploy uses `--update-env-vars` (merge) so Resend keys are not wiped. Do **not** switch back to `--set-env-vars`.
 
 
 

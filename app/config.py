@@ -1,5 +1,7 @@
 """Application settings loaded from environment variables."""
 
+from typing import Optional
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -30,6 +32,12 @@ class Settings(BaseSettings):
 
     # Optional: verify Retell event webhooks (skipped if empty)
     retell_api_key: str = ""
+
+    # Email settings (Resend)
+    resend_api_key: Optional[str] = None
+    email_from: str = "Summit Air <onboarding@resend.dev>"
+    email_enabled: bool = True
+    admin_notification_email: str = "axeldelakowski@gmail.com"
 
 
 settings = Settings()
