@@ -15,13 +15,9 @@ class Settings(BaseSettings):
     app_env: str = "development"
     log_level: str = "INFO"
 
-    # Email settings
-    smtp_host: str = "smtp.gmail.com"
-    smtp_port: int = 587
-    smtp_username: Optional[str] = None
-    smtp_password: Optional[str] = None
-    smtp_from_email: Optional[str] = None
-    smtp_from_name: str = "Summit Air"
+    # Email settings (Resend)
+    resend_api_key: Optional[str] = None
+    email_from: str = "Summit Air <onboarding@resend.dev>"
     email_enabled: bool = True
     admin_notification_email: str = "axeldelakowski@gmail.com"
 

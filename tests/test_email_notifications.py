@@ -30,8 +30,6 @@ def test_email_service_initialization():
 @pytest.mark.asyncio
 async def test_send_admin_booking_notification():
     """Test sending admin booking notification email."""
-    service = EmailService()
-    
     booking_data = {
         "confirmation_id": "SA-TEST123456",
         "call_id": "call_123",
@@ -46,6 +44,9 @@ async def test_send_admin_booking_notification():
     # Test with email disabled (should return False)
     with patch("app.email_service.settings") as mock_settings:
         mock_settings.email_enabled = False
+        mock_settings.resend_api_key = "test_key"
+        mock_settings.email_from = "test@test.com"
+        service = EmailService()
         result = await service.send_admin_booking_notification(
             "test@example.com",
             booking_data,
@@ -57,8 +58,6 @@ async def test_send_admin_booking_notification():
 @pytest.mark.asyncio
 async def test_send_admin_priority_notification():
     """Test sending admin priority notification email."""
-    service = EmailService()
-    
     ticket_data = {
         "ticket_id": "PRI-ABCD1234",
         "call_id": "call_456",
@@ -71,6 +70,9 @@ async def test_send_admin_priority_notification():
     # Test with email disabled (should return False)
     with patch("app.email_service.settings") as mock_settings:
         mock_settings.email_enabled = False
+        mock_settings.resend_api_key = "test_key"
+        mock_settings.email_from = "test@test.com"
+        service = EmailService()
         result = await service.send_admin_priority_notification(
             "test@example.com",
             ticket_data,
@@ -82,8 +84,6 @@ async def test_send_admin_priority_notification():
 @pytest.mark.asyncio
 async def test_send_admin_escalation_notification():
     """Test sending admin escalation notification email."""
-    service = EmailService()
-    
     escalation_data = {
         "call_id": "call_789",
         "action": "evacuate_and_call_911",
@@ -96,6 +96,9 @@ async def test_send_admin_escalation_notification():
     # Test with email disabled (should return False)
     with patch("app.email_service.settings") as mock_settings:
         mock_settings.email_enabled = False
+        mock_settings.resend_api_key = "test_key"
+        mock_settings.email_from = "test@test.com"
+        service = EmailService()
         result = await service.send_admin_escalation_notification(
             "test@example.com",
             escalation_data,
