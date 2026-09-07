@@ -22,7 +22,7 @@ $deployArgs = @(
     "--region=$Region",
     "--platform=managed",
     "--port=8080",
-    "--set-env-vars=APP_ENV=production,LOG_LEVEL=INFO,WEBHOOK_BASE_URL=$($env:WEBHOOK_BASE_URL)"
+    "--set-env-vars=APP_ENV=production,LOG_LEVEL=INFO,WEBHOOK_BASE_URL=$($env:WEBHOOK_BASE_URL),SCHEDULE_DB_PATH=/tmp/schedule.db"
 )
 
 if ($AllowUnauthenticated -eq "true") {

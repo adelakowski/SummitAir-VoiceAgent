@@ -14,9 +14,26 @@ class Settings(BaseSettings):
 
     app_env: str = "development"
     log_level: str = "INFO"
+    webhook_base_url: str = ""
 
-    # Email settings (Resend)
+    # Technician schedule DB (SQLite). Empty → in-memory (tests).
+    # Cloud Run: use a mounted volume path or /tmp for single-instance demos.
+    schedule_db_path: str = "data/schedule.db"
+
+    # Post-call email summary / Resend or SMTP
+    summary_email_to: str = ""
+    summary_email_from: str = "Summit Air Alex <onboarding@resend.dev>"
     resend_api_key: Optional[str] = None
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_use_tls: bool = True
+
+    # Optional: verify Retell event webhooks (skipped if empty)
+    retell_api_key: str = ""
+
+    # Mid-call admin notifications (tool handlers → EmailService)
     email_from: str = "Summit Air <onboarding@resend.dev>"
     email_enabled: bool = True
     admin_notification_email: str = "axeldelakowski@gmail.com"

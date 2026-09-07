@@ -14,8 +14,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
 COPY prompts ./prompts
 
-RUN chown -R appuser:appuser /app
+RUN mkdir -p /app/data && chown -R appuser:appuser /app
 USER appuser
+
+ENV SCHEDULE_DB_PATH=/tmp/schedule.db
 
 EXPOSE 8080
 

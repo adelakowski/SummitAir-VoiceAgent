@@ -16,6 +16,13 @@ env/
 .env.local
 *.pem
 
+# Local schedule DB
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
 # Test / coverage
 .pytest_cache/
 .coverage
@@ -35,8 +42,3 @@ dist/
 *.swp
 .DS_Store
 Thumbs.db
-
-# Split/PR tooling
-.split-backup/
-.split-backup.zip
-.split-worktree/
