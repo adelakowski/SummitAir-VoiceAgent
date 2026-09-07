@@ -57,6 +57,10 @@ jobs:
       CLOUD_RUN_SERVICE: ${{ vars.CLOUD_RUN_SERVICE || 'summit-air-voice-agent' }}
       ALLOW_UNAUTHENTICATED: ${{ vars.ALLOW_UNAUTHENTICATED || 'true' }}
       WEBHOOK_BASE_URL: ${{ vars.WEBHOOK_BASE_URL || secrets.WEBHOOK_BASE_URL }}
+      SCHEDULE_DB_PATH: ${{ vars.SCHEDULE_DB_PATH || '/tmp/schedule.db' }}
+      SUMMARY_EMAIL_TO: ${{ vars.SUMMARY_EMAIL_TO || secrets.SUMMARY_EMAIL_TO }}
+      SUMMARY_EMAIL_FROM: ${{ vars.SUMMARY_EMAIL_FROM || secrets.SUMMARY_EMAIL_FROM }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -115,9 +119,23 @@ jobs:
             AUTH_FLAG="--allow-unauthenticated"
           fi
 
-          ENV_VARS="APP_ENV=production,LOG_LEVEL=INFO"
+          # Use --update-env-vars (merge) — never --set-env-vars (replaces/wipes Resend keys).
+          ENV_VARS="APP_ENV=production,LOG_LEVEL=INFO,SCHEDULE_DB_PATH=${SCHEDULE_DB_PATH}"
           if [ -n "${WEBHOOK_BASE_URL}" ]; then
             ENV_VARS="${ENV_VARS},WEBHOOK_BASE_URL=${WEBHOOK_BASE_URL}"
+          fi
+          if [ -n "${SUMMARY_EMAIL_TO}" ]; then
+            ENV_VARS="${ENV_VARS},SUMMARY_EMAIL_TO=${SUMMARY_EMAIL_TO}"
+          fi
+          if [ -n "${SUMMARY_EMAIL_FROM}" ]; then
+            ENV_VARS="${ENV_VARS},SUMMARY_EMAIL_FROM=${SUMMARY_EMAIL_FROM}"
+          else
+            ENV_VARS="${ENV_VARS},SUMMARY_EMAIL_FROM=Summit Air Alex <onboarding@resend.dev>"
+          fi
+          if [ -n "${RESEND_API_KEY}" ]; then
+            ENV_VARS="${ENV_VARS},RESEND_API_KEY=${RESEND_API_KEY}"
+          else
+            echo "WARNING: RESEND_API_KEY secret is empty — post-call email will be skipped until it is set."
           fi
 
           gcloud run deploy "${CLOUD_RUN_SERVICE}" \
@@ -127,7 +145,7 @@ jobs:
             --platform=managed \
             --port=8080 \
             ${AUTH_FLAG} \
-            --set-env-vars="${ENV_VARS}"
+            --update-env-vars="${ENV_VARS}"
 
       - name: Print service URL
         if: steps.gcp.outputs.configured == 'true'
@@ -137,4 +155,4 @@ jobs:
             --region="${GCP_REGION}" \
             --format='value(status.url)')"
           echo "Deployed: ${URL}"
-          echo "Set WEBHOOK_BASE_URL to this URL and update Retell tool endpoints if needed."
+          echo "Confirm SUMMARY_EMAIL_TO / RESEND_API_KEY are present on the service (GitHub secrets → Cloud Run)."
