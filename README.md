@@ -49,18 +49,28 @@ Alex answers Summit Air inbound HVAC calls during seasonal volume spikes: classi
 ## Architecture
 
 ```mermaid
-flowchart LR
+flowchart TB
   Caller --> Twilio --> Retell["Retell AI<br/>STT / TTS / barge-in"]
-  Retell -->|"tool calls"| Tools["FastAPI on Cloud Run<br/>/webhooks/retell/*"]
-  Tools --> Classify["classify_urgency"]
-  Tools --> Flag["flag_priority"]
-  Tools --> Schedule["mock_schedule"]
-  Tools --> Escalate["escalate_emergency"]
-  Tools --> Availability["check_availability"]
+  Retell -->|"custom tool calls"| API["FastAPI on Cloud Run<br/>/webhooks/retell/*"]
+
+  API --> classify_urgency
+  API --> escalate_emergency
+  API --> flag_priority
+  API --> mock_schedule
+  API --> check_availability
+
+  flag_priority --> SQLite["SQLite schedule<br/>John · Paul · George"]
+  mock_schedule --> SQLite
+  check_availability --> SQLite
+
+  escalate_emergency --> Email["Admin email via Resend<br/>email_service"]
+  flag_priority --> Email
+  mock_schedule --> Email
 ```
 
-- **Retell** owns voice quality and interruptions; this repo owns deterministic triage + mock tools.
-- **Cloud Run** serves webhooks serverless; see [`docs/deployment.md`](docs/deployment.md).
+- **Retell** owns telephony quality, STT/TTS, and barge-in; this repo owns deterministic triage, booking tools, SQLite tech schedule, and admin email notifications.
+- **Cloud Run** serves the public webhooks — see [`docs/deployment.md`](docs/deployment.md).
+- **Email:** `escalate_emergency` / `flag_priority` / `mock_schedule` notify the admin asynchronously when `EMAIL_ENABLED` and `ADMIN_NOTIFICATION_EMAIL` are set (not a separate Retell event webhook on this branch).
 
 
 
@@ -77,6 +87,8 @@ flowchart LR
 | SQLite tech schedule (John/Paul/George) | ServiceTitan / multi-region calendar |
 
 | Deterministic `classify_urgency` rules | LLM-only triage without tests |
+
+| Mid-call admin email (Resend) | Full CRM / ticketing sync |
 
 | Unauth Cloud Run OK for demo | Production IAM / signed webhooks |
 
