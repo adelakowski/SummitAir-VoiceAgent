@@ -48,28 +48,18 @@ Alex answers Summit Air inbound HVAC calls during seasonal volume spikes: classi
 
 ## Architecture
 
-
-
-```text
-
-Caller → Twilio → Retell AI (STT/TTS/endpointing/barge-in)
-
-                      │ custom LLM tool calls
-
-                      ▼
-
-              FastAPI on Cloud Run  /webhooks/retell/*
-
-                 classify_urgency · flag_priority · mock_schedule
-
-                 escalate_emergency · check_availability
-
+```mermaid
+flowchart LR
+  Caller --> Twilio --> Retell["Retell AI<br/>STT / TTS / barge-in"]
+  Retell -->|"tool calls"| Tools["FastAPI on Cloud Run<br/>/webhooks/retell/*"]
+  Tools --> Classify["classify_urgency"]
+  Tools --> Flag["flag_priority"]
+  Tools --> Schedule["mock_schedule"]
+  Tools --> Escalate["escalate_emergency"]
+  Tools --> Availability["check_availability"]
 ```
 
-
-
 - **Retell** owns voice quality and interruptions; this repo owns deterministic triage + mock tools.
-
 - **Cloud Run** serves webhooks serverless; see [`docs/deployment.md`](docs/deployment.md).
 
 
