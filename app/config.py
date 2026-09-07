@@ -1,5 +1,7 @@
 """Application settings loaded from environment variables."""
 
+from typing import Optional
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,6 +14,16 @@ class Settings(BaseSettings):
 
     app_env: str = "development"
     log_level: str = "INFO"
+
+    # Email settings
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_username: Optional[str] = None
+    smtp_password: Optional[str] = None
+    smtp_from_email: Optional[str] = None
+    smtp_from_name: str = "Summit Air"
+    email_enabled: bool = True
+    admin_notification_email: str = "axeldelakowski@gmail.com"
 
 
 settings = Settings()
